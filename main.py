@@ -3,9 +3,11 @@ import json
 import mlflow
 import tempfile
 import os
+import logging
 import wandb
 import hydra
 from omegaconf import DictConfig
+import yaml
 
 _steps = [
     "download",
@@ -20,7 +22,15 @@ _steps = [
 ]
 
 
-# This automatically reads in the configuration
+def get_credentials(filepath="credentials.yaml"):
+    with open(filepath) as file:
+        credentials = yaml.safe_load(file)
+
+    logging.info(f"Loaded credentials from {filepath} with keys {credentials.keys()}")
+
+    return credentials
+
+
 @hydra.main(config_name='config')
 def go(config: DictConfig):
 
@@ -42,7 +52,7 @@ def go(config: DictConfig):
                 "main",
                 parameters={
                     "sample": config["etl"]["sample"],
-                    "artifact_name": "sample.csv",
+                    "artifact_name": "sample1.csv",
                     "artifact_type": "raw_data",
                     "artifact_description": "Raw file as downloaded"
                 },
@@ -92,4 +102,10 @@ def go(config: DictConfig):
 
 
 if __name__ == "__main__":
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print(f"PWD: {dir_path}")
+
+    credentials = get_credentials()
+    os.environ["WANDB_API_KEY"] = credentials['wandb']['api_key']
+
     go()
