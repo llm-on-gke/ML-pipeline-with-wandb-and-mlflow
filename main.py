@@ -59,10 +59,18 @@ def go(config: DictConfig):
             )
 
         if "basic_cleaning" in active_steps:
-            ##################
-            # Implement here #
-            ##################
-            pass
+            _ = mlflow.run(
+                os.path.join(hydra.utils.get_original_cwd(), "src", "basic_cleaning"),
+                "main",
+                parameters={
+                    "input_artifact": "sample1.csv:latest",
+                    "output_artifact": "clean_sample.csv",
+                    "output_type": "clean_sample",
+                    "output_description": "Data with outliers and null values removed",
+                    "min_price": config['etl']['min_price'],
+                    "max_price": config['etl']['max_price']
+                },
+            )
 
         if "data_check" in active_steps:
             ##################
@@ -102,8 +110,6 @@ def go(config: DictConfig):
 
 
 if __name__ == "__main__":
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(f"PWD: {dir_path}")
 
     credentials = get_credentials()
     os.environ["WANDB_API_KEY"] = credentials['wandb']['api_key']

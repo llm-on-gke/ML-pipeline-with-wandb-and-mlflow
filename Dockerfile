@@ -1,8 +1,7 @@
-# ref https://github.com/tebeka/pythonwise/blob/master/docker-miniconda/Dockerfile
 FROM ubuntu:18.04
 
-# System packages
-RUN apt-get update && apt-get install -y curl
+# install curl, git, and vim
+RUN apt-get update && apt-get install -y curl git vim
 
 # Install miniconda to /miniconda
 RUN curl -LO http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -11,8 +10,7 @@ RUN rm Miniconda3-latest-Linux-x86_64.sh
 ENV PATH=/miniconda/bin:${PATH}
 RUN conda update -y conda
 
-# install git, vim and nano
-RUN apt update && apt install -y git && apt install vim nano -y
+RUN apt update && apt install -y git vim
 
 # switch workdir to source folder /usr/src
 WORKDIR /usr/src
@@ -21,8 +19,11 @@ WORKDIR /usr/src
 COPY environment.yml .
 RUN conda env create -f environment.yml
 
-
-# Pull the environment name out of the environment.yml
+# activate the conda env
 ARG conda_env_name=nyc_airbnb_dev
 RUN echo "source activate $conda_env_name" > ~/.bashrc
 ENV PATH /opt/conda/envs/$conda_env_name/bin:$PATH
+
+# fetch data, run eda
+# RUN mlflow run . -P steps=download
+# RUN mlflow run src/eda

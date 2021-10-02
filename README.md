@@ -1,6 +1,6 @@
 # NEXT ACTIONS
 
-* copy
+* run docker container and mlflow download and eda step with notebook
 
 ---
 
@@ -21,14 +21,18 @@ docker build -t mlops:latest .
 
 # create container with mounted project dir
 docker run -it \
-    --rm \
-    -p 8080:8080 \
-    -v "$(pwd):/usr/src" \
-    mlops:latest
+   --rm \
+   -p 8080:8080 \
+   -v "$(pwd):/usr/src" \
+   mlops:latest
 
 # open bash within container to run steps
 mlflow run . -P steps=download
 mlflow run src/eda
+
+# to run jupyter lab
+jupyter lab --port 8080 --ip 0.0.0.0 --no-browser --allow-root
+
 ```
 
 ---
