@@ -15,17 +15,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
 
 
-def get_credentials(filepath="credentials.yaml"):
-    with open(filepath) as file:
-        credentials = yaml.safe_load(file)
-
-    logging.info(
-        f"Loaded credentials from {filepath} with keys {credentials.keys()}"
-    )
-
-    return credentials
-
-
 def go(args):
 
     run = wandb.init(job_type="basic_cleaning")
@@ -35,9 +24,7 @@ def go(args):
     # particular version of the artifact
     artifact_local_path = run.use_artifact(args.input_artifact).file()
 
-    # run = wandb.init(project="nyc_airbnb", group="basic_cleaning", save_code=True)  # from jupyter notebook
-    # local_path = wandb.use_artifact(args.input_artifact).file()
-
+    logger.info(f"Downloaded input artifact to {artifact_local_path}")
     df_raw = pd.read_csv(artifact_local_path)
 
     # data cleaning refactored
@@ -46,6 +33,8 @@ def go(args):
         .loc[df_raw['price'].between(args.min_price, args.max_price)]  # Drop outliers
         .assign(last_review=pd.to_datetime(df_raw['last_review']))  # datetime
     )
+
+    logger.info("Cleaned data for outliers")
 
     df.to_csv("clean_sample.csv", index=False)
 
@@ -107,8 +96,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-
-    credentials = get_credentials()
-    os.environ["WANDB_API_KEY"] = credentials['wandb']['api_key']
-
     go(args)

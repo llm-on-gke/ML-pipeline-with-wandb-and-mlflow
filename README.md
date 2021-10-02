@@ -6,17 +6,17 @@
 
 ## Getting started
 
-Create a `credentials.yaml` and insert credentials
+Create a `credentials.yaml` in project root and insert credentials
 
 ```yaml
 wandb:
    apikey: [YOUR WAND API KEY]
 ```
 
-Docker workflow
+Use docker to run the project.
 
 ```docker
-# build image
+# builds image with Dockerfile
 docker build -t mlops:latest .
 
 # create container with mounted project dir
@@ -27,12 +27,10 @@ docker run -it \
    mlops:latest
 
 # open bash within container to run steps
-mlflow run . -P steps=download
-mlflow run src/eda
+mlflow run . -P steps=download,basic_cleaning
 
 # to run jupyter lab
 jupyter lab --port 8080 --ip 0.0.0.0 --no-browser --allow-root
-
 ```
 
 ---
