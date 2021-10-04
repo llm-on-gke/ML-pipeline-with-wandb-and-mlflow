@@ -33,6 +33,14 @@ mlflow run . -P steps=download,basic_cleaning
 jupyter lab --port 8080 --ip 0.0.0.0 --no-browser --allow-root
 ```
 
+Run hydra multirun (`-m`) on hyperparameter to find best model
+
+```bash
+mlflow run . \
+  -P steps=train_random_forest \
+  -P hydra_options="modeling.max_tfidf_features=10,15,30 modeling.random_forest.max_features=0.1,0.33,0.5,0.75,1 -m"
+```
+
 ---
 
 # Build an ML Pipeline for Short-Term Rental Prices in NYC
