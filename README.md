@@ -1,16 +1,18 @@
 # ML pipeline with MLFlow and Weights and Biases
 
 
+Weights and biases project: https://wandb.ai/philippschmalen/nyc_airbnb?workspace=user-philippschmalen
+
 ## Getting started
 
-Create a `credentials.yaml` in project root and insert credentials
+Create a `credentials.yaml` in project root and insert credentials (`wandb` > profile settings > API key)
 
 ```yaml
 wandb:
    apikey: [YOUR WAND API KEY]
 ```
 
-Use docker to run the project.
+Use docker to run or develop the project
 
 ```docker
 # builds image with Dockerfile
@@ -29,12 +31,11 @@ Run pipeline components or jupyter notebook
 ```bash
 # open bash within container to run steps
 mlflow run . -P steps=download,basic_cleaning
-
-# to run jupyter lab
+# add options for jupyter lab
 jupyter lab --port 8080 --ip 0.0.0.0 --no-browser --allow-root
 ```
 
-Run hydra multirun (`-m`) on hyperparameter to find the best model
+Find the best model hyperparameters with hydra multirun (`-m`):
 
 ```bash
 mlflow run . \
@@ -46,7 +47,6 @@ To run the entire pipeline:
 
 ```bash
 git pull origin master
-
 mlflow run . -P hydra_options="etl.sample='sample2.csv'"
 ```
 
