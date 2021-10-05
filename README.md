@@ -1,8 +1,5 @@
-# NEXT ACTIONS
+# ML pipeline with MLFlow and Weights and Biases
 
-* run docker container and mlflow download and eda step with notebook
-
----
 
 ## Getting started
 
@@ -25,7 +22,11 @@ docker run -it \
    -p 8080:8080 \
    -v "$(pwd):/usr/src" \
    mlops:latest
+```
 
+Run pipeline components or jupyter notebook
+
+```bash
 # open bash within container to run steps
 mlflow run . -P steps=download,basic_cleaning
 
@@ -33,7 +34,7 @@ mlflow run . -P steps=download,basic_cleaning
 jupyter lab --port 8080 --ip 0.0.0.0 --no-browser --allow-root
 ```
 
-Run hydra multirun (`-m`) on hyperparameter to find best model
+Run hydra multirun (`-m`) on hyperparameter to find the best model
 
 ```bash
 mlflow run . \
@@ -53,7 +54,7 @@ In this project you will build such a pipeline.
 
 ## Table of contents
 
-- [NEXT ACTIONS](#next-actions)
+- [ML pipeline with MLFlow and Weights and Biases](#ml-pipeline-with-mlflow-and-weights-and-biases)
   - [Getting started](#getting-started)
 - [Build an ML Pipeline for Short-Term Rental Prices in NYC](#build-an-ml-pipeline-for-short-term-rental-prices-in-nyc)
   - [Table of contents](#table-of-contents)
