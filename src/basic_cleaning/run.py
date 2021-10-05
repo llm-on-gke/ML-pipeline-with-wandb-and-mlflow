@@ -29,9 +29,12 @@ def go(args):
 
     # data cleaning refactored
     df = (
-        df_raw
-        .loc[df_raw['price'].between(args.min_price, args.max_price)]  # Drop outliers
-        .assign(last_review=pd.to_datetime(df_raw['last_review']))  # datetime
+        df_raw.loc[
+            df_raw["price"].between(args.min_price, args.max_price)
+        ]  # Drop outliers
+        .loc[df_raw["longitude"].between(-74.25, -73.50)]
+        .loc[df_raw["latitude"].between(40.5, 41.2)]
+        .assign(last_review=pd.to_datetime(df_raw["last_review"]))  # datetime
     )
 
     logger.info("Cleaned data for outliers")
@@ -57,42 +60,42 @@ if __name__ == "__main__":
         "--input_artifact",
         type=str,
         help="Name of input artifact",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
         "--output_artifact",
         type=str,
         help="Name of output artifact",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
         "--output_type",
         type=str,
         help="Type of output, for example csv",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
         "--output_description",
         type=str,
         help="Describe what the output contains",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
         "--min_price",
         type=float,
         help="Cleaning: Ignore outliers with price < min_price",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
         "--max_price",
         type=float,
         help="Cleaning: Ignore outliers with price > max_price",
-        required=True
+        required=True,
     )
 
     args = parser.parse_args()
