@@ -3,6 +3,8 @@
 
 Weights and biases project: https://wandb.ai/philippschmalen/nyc_airbnb?workspace=user-philippschmalen
 
+Git repo: https://github.com/philippschmalen/ML-pipeline-with-wandb-and-mlflow
+
 ## Getting started
 
 Create a `credentials.yaml` in project root and insert credentials (`wandb` > profile settings > API key)
