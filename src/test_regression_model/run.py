@@ -2,6 +2,8 @@
 """
 This step takes the best model, tagged with the "prod" tag, and tests it against the test dataset
 """
+
+import os
 import argparse
 import logging
 import wandb
@@ -21,7 +23,7 @@ def go(args):
     run = wandb.init(job_type="test_model")
     run.config.update(args)
 
-    logger.info("Downloading artifacts")
+    logger.info(f"Downloading artifacts for model: {args.mlflow_model}")
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
     model_local_path = run.use_artifact(args.mlflow_model).download()
