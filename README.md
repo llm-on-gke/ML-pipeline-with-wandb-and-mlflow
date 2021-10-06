@@ -26,6 +26,8 @@ docker run -it \
    -p 8080:8080 \
    -v "$(pwd):/usr/src" \
    mlops:latest
+
+# develop code locally in project folder, then run within container
 ```
 
 Run pipeline components or jupyter notebook
