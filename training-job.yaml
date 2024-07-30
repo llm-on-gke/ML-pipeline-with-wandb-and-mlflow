@@ -51,10 +51,10 @@ spec:
               - name: WANDB_API_KEY
                 valueFrom:
                   secretKeyRef:
-                    name: wandb-api-key-<USER>
+                    name: wandbapikey
                     key: WANDB_API_KEY                
-              - name: PYTHON_SCRIPT
-                value: "experiments/diffusion/diffusion.py --config=<CONFIG_FILE> --trainer.num_nodes=<NODE_COUNT> --trainer.logger.name=<JOB_NAME> --trainer.devices=auto <CONFIG_OPTIONS> fit"
+              #- name: PYTHON_SCRIPT
+              #  value: "experiments/diffusion/diffusion.py --config=<CONFIG_FILE> --trainer.num_nodes=<NODE_COUNT> --trainer.logger.name=<JOB_NAME> --trainer.devices=auto <CONFIG_OPTIONS> fit"
              
               securityContext:
                 privileged: true    
