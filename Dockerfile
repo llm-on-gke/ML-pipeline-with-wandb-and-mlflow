@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 # install curl, git, and vim
 RUN apt-get update && apt-get install -y curl git vim
