@@ -29,7 +29,7 @@ spec:
             containers:
            
             - name: pytorch
-              image: us-west4-docker.pkg.dev/production-cluster-424922/docker-images/experiments:<USER>-<DOCKER_TAG>
+              image: us-east1-docker.pkg.dev/rick-vertex-ai/gke-llm/mlflow-wandb:latest
               imagePullPolicy: Always
               # image: gcr.io/k8s-staging-jobset/pytorch-mnist:latest
               ports:
