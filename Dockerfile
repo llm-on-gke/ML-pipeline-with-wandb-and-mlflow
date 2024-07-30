@@ -18,7 +18,7 @@ WORKDIR /usr/src
 # install conda env
 COPY environment.yml .
 RUN conda env create -f environment.yml
-
+RUN git clone https://github.com/llm-on-gke/ML-pipeline-with-wandb-and-mlflow
 # activate the conda env
 ARG conda_env_name=nyc_airbnb_dev
 RUN echo "source activate $conda_env_name" > ~/.bashrc
