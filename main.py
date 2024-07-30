@@ -160,7 +160,7 @@ def go(config: DictConfig):
 
 if __name__ == "__main__":
 
-    credentials = get_credentials()
-    os.environ["WANDB_API_KEY"] = credentials["wandb"]["api_key"]
+    #credentials = get_credentials()
+    #os.environ["WANDB_API_KEY"] = credentials["wandb"]["api_key"]
 
     go()
