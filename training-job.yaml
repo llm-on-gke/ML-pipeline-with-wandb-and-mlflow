@@ -62,7 +62,8 @@ spec:
                - bash
                - -xc
                - |
-                 mlflow run . -P hydra_options="etl.sample='sample2.csv'"
+                 sleep 60000 
+                 # mlflow run . -P hydra_options="etl.sample='sample2.csv'"
               resources:
                 requests:
                   cpu: "2"
