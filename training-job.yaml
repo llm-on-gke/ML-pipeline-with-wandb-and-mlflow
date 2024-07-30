@@ -7,16 +7,16 @@ spec:
   - name: workers
     template:
       spec:
-        parallelism: 2
-        completions: 2
+        parallelism: 1
+        completions: 1
         backoffLimit: 0
         template:
-          metadata:
-             annotations:
-               gke-gcsfuse/volumes: "true"
+          #metadata:
+          #   annotations:
+          #     gke-gcsfuse/volumes: "true"
           spec:
-            schedulingGates:
-            - name: "gke.io/topology-aware-auto-scheduling-<USER>-<JOB_NAME>"
+            #schedulingGates:
+            #- name: "gke.io/topology-aware-auto-scheduling-<USER>-<JOB_NAME>"
             hostNetwork: true
             dnsPolicy: ClusterFirstWithHostNet
             nodeSelector:
@@ -36,11 +36,11 @@ spec:
               - containerPort: 3389
               env:
               - name: MASTER_ADDR
-                value: "<USER>-<JOB_NAME>-workers-0-0.<USER>-<JOB_NAME>"
+                value: "training-workers-0-0.training"
               - name: MASTER_PORT
                 value: "3389"
               - name: NODE_COUNT
-                value: "<NODE_COUNT>"
+                value: "1"
               - name: NODE_RANK
                 valueFrom:
                   fieldRef:
