@@ -1,0 +1,80 @@
+apiVersion: jobset.x-k8s.io/v1alpha2
+kind: JobSet
+metadata:
+  name: training
+spec:
+  replicatedJobs:
+  - name: workers
+    template:
+      spec:
+        parallelism: 2
+        completions: 2
+        backoffLimit: 0
+        template:
+          metadata:
+             annotations:
+               gke-gcsfuse/volumes: "true"
+          spec:
+            schedulingGates:
+            - name: "gke.io/topology-aware-auto-scheduling-<USER>-<JOB_NAME>"
+            hostNetwork: true
+            dnsPolicy: ClusterFirstWithHostNet
+            nodeSelector:
+               cloud.google.com/gke-accelerator: nvidia-l4
+            #serviceAccountName: training
+            volumes:
+            - name: dshm
+              emptyDir:
+                medium: Memory
+            containers:
+           
+            - name: pytorch
+              image: us-west4-docker.pkg.dev/production-cluster-424922/docker-images/experiments:<USER>-<DOCKER_TAG>
+              imagePullPolicy: Always
+              # image: gcr.io/k8s-staging-jobset/pytorch-mnist:latest
+              ports:
+              - containerPort: 3389
+              env:
+              - name: MASTER_ADDR
+                value: "<USER>-<JOB_NAME>-workers-0-0.<USER>-<JOB_NAME>"
+              - name: MASTER_PORT
+                value: "3389"
+              - name: NODE_COUNT
+                value: "<NODE_COUNT>"
+              - name: NODE_RANK
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+              # Force python to not buffer output and write directly to stdout, so we can view training logs via `kubectl logs`.
+              - name: PYTHONUNBUFFERED
+                value: "0"    
+              - name: WANDB_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: wandb-api-key-<USER>
+                    key: WANDB_API_KEY                
+              - name: PYTHON_SCRIPT
+                value: "experiments/diffusion/diffusion.py --config=<CONFIG_FILE> --trainer.num_nodes=<NODE_COUNT> --trainer.logger.name=<JOB_NAME> --trainer.devices=auto <CONFIG_OPTIONS> fit"
+             
+              securityContext:
+                privileged: true    
+              command:  
+               - bash
+               - -xc
+               - |
+                 mlflow run . -P hydra_options="etl.sample='sample2.csv'"
+              resources:
+                requests:
+                  cpu: "2"
+                  memory: "25Gi"
+                  ephemeral-storage: "25Gi"
+                  nvidia.com/gpu: 2
+                limits:
+                  # cpu: "16"
+                  # memory: "30Gi"
+                  # ephemeral-storage: "30Gi"
+                  nvidia.com/gpu: 2
+
+              volumeMounts:
+               - mountPath: /dev/shm
+                 name: dshm      
