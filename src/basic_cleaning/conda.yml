@@ -3,8 +3,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - pip=20.3.3
-  - pandas=1.2.3
-  - pyyaml=5.4.1
+  - pip #=20.3.3
+  - pandas #=1.2.3
+  - pyyaml #=5.4.1
   - pip:
-      - wandb==0.10.31
+      - wandb #==0.10.31
