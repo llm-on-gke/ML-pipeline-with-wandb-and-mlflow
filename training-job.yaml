@@ -63,6 +63,7 @@ spec:
                - -xc
                - |
                  #sleep 60000 
+                 cd ML-pipeline-with-wandb-and-mlflow
                  mlflow run . -P steps=download,basic_cleaning
                  mlflow run . \
                    -P steps=train_random_forest \
